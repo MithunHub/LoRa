@@ -1,3 +1,5 @@
+# This file is used for LoRa and Raspberry pi4B related issues 
+
 import RPi.GPIO as GPIO
 import serial
 import time
@@ -6,7 +8,7 @@ class sx126x:
 
     M0 = 22
     M1 = 27
-    # if header is 0xC0,the lora register settings dont lost when it poweroff,and 0xC2 will lost
+    # if the header is 0xC0, then the LoRa register settings dont lost when it poweroff, and 0xC2 will be lost. 
     #cfg_reg = [0xC0,0x00,0x09,0x00,0x00,0x00,0x62,0x00,0x17,0x00,0x00,0x00]
     cfg_reg = [0xC2,0x00,0x09,0x00,0x00,0x00,0x62,0x00,0x17,0x00,0x00,0x00]
     get_reg = bytes(12)
@@ -61,8 +63,8 @@ class sx126x:
         GPIO.output(self.M0,GPIO.LOW)
         GPIO.output(self.M1,GPIO.HIGH)
 
-        # the hardware uart of Pi3B+,Pi4B is ttyS0
-        # the Pi zero's hardware uart is ttyAMA0
+        # The hardware UART of Pi3B+,Pi4B is ttyS0
+        # The Pi Zero's hardware UART is ttyAMA0
         self.ser = serial.Serial(serial_num,9600)
         self.ser.flushInput()
         self.set(freq,addr,power,rssi)
@@ -72,7 +74,7 @@ class sx126x:
             relay=False,lbt=False,wor=False):
         self.send_who = addr
         self.addr = addr
-        # it should pull up the M1 pin when sets the module
+        # We should pull up the M1 pin when sets the module
         GPIO.output(self.M0,GPIO.LOW)
         GPIO.output(self.M1,GPIO.HIGH)
         time.sleep(0.1)
@@ -85,10 +87,10 @@ class sx126x:
             freq_temp = freq - 410
         
         air_speed_temp = self.air_speed_cal(air_speed)
-        #if air_speed_temp != None:
+        # if air_speed_temp != None:
         
         buffer_size_temp = self.buffer_size_cal(buffer_size)
-        #if air_speed_temp != None:
+        # if air_speed_temp != None:
         
         power_temp = self.power_cal(power)
         #if power_temp != None:
