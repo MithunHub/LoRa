@@ -5,13 +5,14 @@
 #    this is an UART-LoRa device and thers is an firmware on Module
 #    users can transfer or receive the data directly by UART and dont
 #    need to set parameters like coderate,spread factor,etc.
-#
-#    It dont suport LoRaWAN protocol!!!!!!!!!
-#    
-#    this script is suitable for Raspberry Pi 3B+ 4B and zero series
-#    and PC dont have GPIO to control HAT,It should be setted by
-#    GUI and combine with jumpers at first,please refer to another script
-#    named main_on_pc.py!!!!
+#    |============================================ |
+#    |   It does not suport LoRaWAN protocol !!!   |
+#    | ============================================|
+#   
+#    This script is mainly for Raspberry Pi 3B+, 4B, and Zero series
+#    Since PC/Laptop does not have GPIO to control HAT, it should be configured by
+#    GUI and while setting the jumpers, 
+#    Please refer to another script main_on_pc.py
 #
 
 import sys
@@ -27,10 +28,10 @@ tty.setcbreak(sys.stdin.fileno())
 
 
 #
-#    it must close the uart to login shell and open the hardware uart with
+#    It must close the UART to login shell and open the hardware uart with
 #    command `sudo raspi-config`
 #
-#    when HAT link to Pi,it should be removed the M0 and M1 jumpers on HAT
+#    when HAT link to Pi, it should be removed the M0 and M1 jumpers on HAT
 #
 
 def get_cpu_temp():
