@@ -46,7 +46,7 @@ def get_cpu_temp():
 #   serial_num
 #       PiZero, Pi3B+, and Pi4B use "/dev/ttyS0"
 #
-#    frequence is 850 to 930 ,or 410 to 493 MHz
+#    Frequency is [850 to 930], or [410 to 493] MHz
 #
 #    address is 0 to 65535
 #        under the same frequence,if set 65535,the node can receive 
@@ -60,8 +60,6 @@ def get_cpu_temp():
 #    RSSI (receive signal strength indicator) is {True or False}
 #        It will print the RSSI value when it receives each message
 #
-#    Frequecy 
-#        Operating frequency {433, 470, 868, and 915} MHz
 
 #node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=433,addr=30,power=22,rssi=False)
 #node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=470,addr=20,power=22,rssi=True)
