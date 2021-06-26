@@ -1,5 +1,24 @@
 # LoRa
 
+## LoRa WaveShare
+
+Nomenclature:  `LoRa = SX1268`
+
+#### Manual of LoRa
+
+ `LoRa SX1268` https://www.waveshare.com/w/upload/c/c4/SX1268_V1.0.pdf
+
+Schematic https://www.waveshare.com/w/upload/0/09/SX1262_LoRa_HAT_SchDoc.pdf
+
+
+
+#### Operation Example
+
+[CN] https://www.waveshare.net/wiki/SX1262_915M_LoRa_HAT 
+
+[EN] https://www.waveshare.com/wiki/SX1262_915M_LoRa_HAT
+
+
 ## GPIO
 
 #### GPIO Homepage
