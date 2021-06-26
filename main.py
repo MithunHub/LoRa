@@ -28,18 +28,21 @@ tty.setcbreak(sys.stdin.fileno())
 
 
 #
-#    It must close the UART to login shell and open the hardware uart with
+#    Need to disable the serial login shell and have to enable serial interface 
 #    command `sudo raspi-config`
+#    More details: see https://github.com/MithunHub/LoRa/blob/main/Basic%20Instruction.md
 #
-#    when HAT link to Pi, it should be removed the M0 and M1 jumpers on HAT
+#    When the LoRaHAT is attached to RPi, the M0 and M1 jumpers of HAT should be removed.
 #
 
+
+#    The following is to obtain the temprature of the RPi CPU 
 def get_cpu_temp():
     tempFile = open( "/sys/class/thermal/thermal_zone0/temp" )
     cpu_temp = tempFile.read()
     tempFile.close()
     return float(cpu_temp)/1000
-#   
+
 #   serial_num
 #       PiZero, Pi3B+, and Pi4B use "/dev/ttyS0"
 #
@@ -52,12 +55,13 @@ def get_cpu_temp():
 #        the another note of address is 65535 sends.
 #        otherwise two node must be same the address and frequence
 #
-#    power is 10,13,17,22 dBm
+#    The tramsmit power is {10, 13, 17, and 22} dBm
 #
-#    rssi is True or False
-#        It will print the rssi value when receive every one message
+#    RSSI (receive signal strength indicator) is {True or False}
+#        It will print the RSSI value when it receives each message
 #
-#    choose and uncomment below one line (433,470,868 or 915)
+#    Frequecy 
+#        Operating frequency {433, 470, 868, and 915} MHz
 
 #node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=433,addr=30,power=22,rssi=False)
 #node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=470,addr=20,power=22,rssi=True)
