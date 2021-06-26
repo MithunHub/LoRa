@@ -11,6 +11,20 @@ https://sourceforge.net/projects/raspberry-gpio-python/
 https://sourceforge.net/p/raspberry-gpio-python/wiki/BasicUsage/
 
 
+## PySerial
+
+#### PySerial Homepage
+
+https://pyserial.readthedocs.io/en/latest/pyserial.html
+
+#### PySerial API
+
+==This page is very important== 
+
+https://pyserial.readthedocs.io/en/latest/pyserial_api.html
+
+
+
 #### What is ttyS0?
 
 In the sample program what does it mean? What I understand is that we open the serial port. Now, what is the use of this?
