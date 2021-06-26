@@ -47,4 +47,6 @@ if(ser.isOpen() == False):
     ser.open()
 ```
 
-[Link here](
+[Link here](https://stackoverflow.com/questions/6178705/python-pyserial-how-to-know-if-a-port-is-already-open)
+
+
