@@ -2,8 +2,6 @@
 
 ## LoRa WaveShare
 
-Nomenclature:  `LoRa = SX1268`
-
 #### Manual of LoRa
 
  `LoRa SX1268` https://www.waveshare.com/w/upload/c/c4/SX1268_V1.0.pdf
