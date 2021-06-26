@@ -1,4 +1,16 @@
 # LoRa
+
+## GPIO
+
+#### GPIO Homepage
+
+https://sourceforge.net/projects/raspberry-gpio-python/
+
+#### RPi.GPIO Module Basics
+
+https://sourceforge.net/p/raspberry-gpio-python/wiki/BasicUsage/
+
+
 #### What is ttyS0?
 
 In the sample program what does it mean? What I understand is that we open the serial port. Now, what is the use of this?
