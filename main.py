@@ -41,8 +41,7 @@ def get_cpu_temp():
     return float(cpu_temp)/1000
 #   
 #   serial_num
-#       Pi3B+ or Pi4B use "/dev/ttyS0"
-#       Pi zero series use "/dev/ttyAMA0"
+#       PiZero, Pi3B+, and Pi4B use "/dev/ttyS0"
 #
 #    frequence is 850 to 930 ,or 410 to 493 MHz
 #
