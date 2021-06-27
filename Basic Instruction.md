@@ -7,7 +7,7 @@ Open the serial port of Raspberry Pi.
 ```python
 sudo raspi-config
 ```
-![WechatIMG3694|40%](https://user-images.githubusercontent.com/20032975/123502315-0ef39580-d67e-11eb-8a00-69b0da34b722.jpeg)
+![img](https://user-images.githubusercontent.com/20032975/123502315-0ef39580-d67e-11eb-8a00-69b0da34b722.jpeg)
 
 <img src="https://user-images.githubusercontent.com/20032975/123502317-187cfd80-d67e-11eb-9795-2602ecdf15db.jpeg" width="550">
 
@@ -112,8 +112,9 @@ sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install git
 ```
+Then, clone the git to your preferred directory, e.g., ``mkdir ~\git-repo\`` and ``cd git-repo``
 ```python
-git clone https://github.com/xx
+git clone https://github.com/MithunHub/LoRa.git
 ```
 
 
