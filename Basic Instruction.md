@@ -105,3 +105,17 @@ Back on your PI, double-click on the vnc server button in the upper right taskba
 
 verbatim from here: [Link here](https://www.raspberrypi.org/forums/viewtopic.php?t=214569)
 
+## Clone GitHub
+
+```python
+sudo apt-get update 
+sudo apt-get upgrade
+sudo apt-get install git
+```
+```python
+git clone https://github.com/xx
+```
+
+
+verbatim from here: [Link here](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)
+
