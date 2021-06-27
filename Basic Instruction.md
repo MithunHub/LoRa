@@ -105,6 +105,7 @@ Back on your PI, double-click on the vnc server button in the upper right taskba
 
 verbatim from here: [Link here](https://www.raspberrypi.org/forums/viewtopic.php?t=214569)
 
+<<<<<<< HEAD
 ## Clone GitHub
 
 ```python
@@ -119,4 +120,27 @@ git clone https://github.com/MithunHub/LoRa.git
 
 
 verbatim from here: [Link here](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)
+=======
+
+
+### How to use on Windows PC
+install python3 on pc
+
+open the cmd add python path to cmd,then install pyserial,see figure set_env.jpg
+```
+path=%path%;C:\Users\zhongshaohua\AppData\Local\Programs\Python\Python37
+path=%path%;C:\Users\zhongshaohua\AppData\Local\Programs\Python\Python37\Scripts
+pip3 install pyserial
+```
+
+open the manager to check the LoRa HAT COMx number and change it on pc_node_main.py file,like that
+```
+node = sx126x(serial_num = "COM8",freq=868,addr=65535,power=22,rssi=True)
+```
+
+run the code example
+```
+python C:\Users\zhongshaohua\Desktop\pc_node_main.py
+```
+>>>>>>> pr/1
 

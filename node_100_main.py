@@ -22,6 +22,7 @@ import time
 import select
 import termios
 import tty
+from threading import Timer
 
 old_settings = termios.tcgetattr(sys.stdin)
 tty.setcbreak(sys.stdin.fileno())
@@ -62,7 +63,7 @@ def get_cpu_temp():
 #
 
 #node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=433,addr=30,power=22,rssi=False)
-node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=21,power=22,rssi=True)
+node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=100,power=22,rssi=True)
 
 def send_deal():
     get_rec = ""
@@ -79,43 +80,91 @@ def send_deal():
             sys.stdout.flush()
 
     get_t = get_rec.split(",")
+    
+    node.addr_temp = node.addr
     node.set(node.freq,int(get_t[0]),node.power,node.rssi)
     node.send(get_t[1])
+    node.set(node.freq,node.addr_temp,node.power,node.rssi)
 
     print('\x1b[2A',end='\r')
-    print("                                                                                         ")
-    print("                                                                                         ")
-    print("                                                                                         ")
+    print(" "*100)
+    print(" "*100)
+    print(" "*100)
     print('\x1b[3A',end='\r')
 
+
+def send_cpu_continue(send_to_who,continue_or_not = True):
+    
+    if continue_or_not:
+        global timer_task
+        global seconds
+        node.send_to = send_to_who
+        node.addr_temp = node.addr
+        node.set(node.freq,node.send_to,node.power,node.rssi)
+        node.send("CPU Temperature:"+str(get_cpu_temp())+" C")
+        node.set(node.freq,node.addr_temp,node.power,node.rssi)
+        timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
+        timer_task.start()
+    else:
+        node.send_to = send_to_who
+        node.addr_temp = node.addr
+        node.set(node.freq,node.send_to,node.power,node.rssi)
+        node.send("CPU Temperature:"+str(get_cpu_temp())+" C")
+        node.set(node.freq,node.addr_temp,node.power,node.rssi)
+        pass
+    
 try:
     time.sleep(1)
     print("Press \033[1;32mEsc\033[0m to exit")
     print("Press \033[1;32mi\033[0m   to send")
+    print("Press \033[1;32ms\033[0m   to send cpu temperature every 10 seconds")
     
-    # node.send("CPU Temperature:"+str(get_cpu_temp())+" C")
+    # it will send every seconds(default is 10) seconds 
+    # send_to_who is the address of other node ( defult is 100)
+    send_to_who = 100
+    seconds = 10
+    # timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
     
     while True:
 
         if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
             c = sys.stdin.read(1)
+
             # dectect key Esc
             if c == '\x1b': break
             # dectect key i
             if c == '\x69':
                 send_deal()
+            # dectect key s
+            if c == '\x73':
+                print("Press \033[1;32mc\033[0m   to exit the send task")
+                timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
+                timer_task.start()
+                
+                while True:
+                    if sys.stdin.read(1) == '\x63':
+                        timer_task.cancel()
+                        print('\x1b[1A',end='\r')
+                        print(" "*100)
+                        print('\x1b[1A',end='\r')
+                        break
+
             sys.stdout.flush()
+            
+            
         node.receive()
         
-        ## timer,send messages automatically
+        # timer,send messages automatically
         
 except:
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-    print("")
-    print("")
-    print("")
+    # print('\x1b[2A',end='\r')
+    # print(" "*100)
+    # print(" "*100)
+    # print('\x1b[2A',end='\r')
 
 termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-print("")
-print("")
-print("")
+# print('\x1b[2A',end='\r')
+# print(" "*100)
+# print(" "*100)
+# print('\x1b[2A',end='\r')

@@ -12,7 +12,7 @@
 #    This script is mainly for Raspberry Pi 3B+, 4B, and Zero series
 #    Since PC/Laptop does not have GPIO to control HAT, it should be configured by
 #    GUI and while setting the jumpers, 
-#    Please refer to another script pc_main.py
+#    Please refer to another script main_on_pc.py
 #
 
 import sys
@@ -93,7 +93,7 @@ try:
     print("Press \033[1;32mEsc\033[0m to exit")
     print("Press \033[1;32mi\033[0m   to send")
     
-    # node.send("CPU Temperature:"+str(get_cpu_temp())+" C")
+    node.send("CPU Temperature:"+str(get_cpu_temp())+" C")
     
     while True:
 
@@ -106,9 +106,6 @@ try:
                 send_deal()
             sys.stdout.flush()
         node.receive()
-        
-        ## timer,send messages automatically
-        
 except:
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
     print("")

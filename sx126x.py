@@ -9,13 +9,14 @@ class sx126x:
     M0 = 22
     M1 = 27
     # if the header is 0xC0, then the LoRa register settings dont lost when it poweroff, and 0xC2 will be lost. 
-    #cfg_reg = [0xC0,0x00,0x09,0x00,0x00,0x00,0x62,0x00,0x17,0x00,0x00,0x00]
+    # cfg_reg = [0xC0,0x00,0x09,0x00,0x00,0x00,0x62,0x00,0x17,0x00,0x00,0x00]
     cfg_reg = [0xC2,0x00,0x09,0x00,0x00,0x00,0x62,0x00,0x17,0x00,0x00,0x00]
     get_reg = bytes(12)
     rssi = False
     addr = 65535
     serial_n = ""
-    send_who = 0
+    send_to = 0
+    addr_temp = 0
     freq = 868
     power = 22
     air_speed =2400
@@ -54,7 +55,7 @@ class sx126x:
         self.freq = freq
         self.serial_n = serial_num
         self.power = power
-        self.send_who = addr
+        self.send_to = addr
         # Initial the GPIO for M0 and M1 Pin
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
@@ -63,8 +64,7 @@ class sx126x:
         GPIO.output(self.M0,GPIO.LOW)
         GPIO.output(self.M1,GPIO.HIGH)
 
-        # The hardware UART of Pi3B+,Pi4B is ttyS0
-        # The Pi Zero's hardware UART is ttyAMA0
+        # The hardware UART of Pi3B+,Pi4B is /dev/ttyS0
         self.ser = serial.Serial(serial_num,9600)
         self.ser.flushInput()
         self.set(freq,addr,power,rssi)
@@ -72,7 +72,7 @@ class sx126x:
     def set(self,freq,addr,power,rssi,air_speed=2400,\
             net_id=0,buffer_size = 240,crypt=0,\
             relay=False,lbt=False,wor=False):
-        self.send_who = addr
+        self.send_to = addr
         self.addr = addr
         # We should pull up the M1 pin when sets the module
         GPIO.output(self.M0,GPIO.LOW)
@@ -112,6 +112,7 @@ class sx126x:
         self.cfg_reg[9] = 0x03
         self.cfg_reg[10] = h_crypt
         self.cfg_reg[11] = l_crypt
+        self.ser.flushInput()
 
         for i in range(2):
             self.ser.write(bytes(self.cfg_reg))
@@ -136,14 +137,15 @@ class sx126x:
                     #print("parameters setting fail :",r_buff)
                 break
             else:
-                print("setting fail,setting again")
-                time.sleep(2)
-                print('\x1b[1A',end='\r')
-                if i == 1:
-                    print("setting fail,exit lora setting")
-                    time.sleep(2)
-                    print('\x1b[1A',end='\r')
-                pass
+                # print("setting fail,setting again")
+                self.ser.flushInput()
+                time.sleep(0.2)
+                # print('\x1b[1A',end='\r')
+                # if i == 1:
+                    # print("setting fail,Press Esc to Exit and run again")
+                    # time.sleep(2)
+                    # print('\x1b[1A',end='\r')
+                # pass
 
         GPIO.output(self.M0,GPIO.LOW)
         GPIO.output(self.M1,GPIO.LOW)
@@ -226,38 +228,34 @@ class sx126x:
         time.sleep(0.1)
         
         # add the node address ,and the node of address is 65535 can konw who send messages
-        l_addr = self.send_who & 0xff
-        h_addr = self.send_who >> 8 & 0xff
+        l_addr = self.addr_temp & 0xff
+        h_addr = self.addr_temp >> 8 & 0xff
 
         self.ser.write(bytes([h_addr,l_addr])+data.encode())
         # if self.rssi == True:
             # self.get_channel_rssi()
+        time.sleep(0.1)
 
     def receive(self):
         if self.ser.inWaiting() > 0:
             time.sleep(0.2)
             r_buff = self.ser.read(self.ser.inWaiting())
-            #   check the node address 
-            if ((r_buff[0]<<8)+r_buff[1]) == 65535 or ((r_buff[0]<<8)+r_buff[1]) == self.addr:
-            # if ((r_buff[0]<<8)+r_buff[1]) == self.addr:
-                print("receive message from address\033[1;32m %d node \033[0m"%((r_buff[0]<<8)+r_buff[1]),end='\r\n',flush = True)
-                print("message is "+str(r_buff[2:]),end='\r\n')
-                # print the rssi
-                if self.rssi:
-                    self.get_channel_rssi()
-                    #print('\x1b[3A',end='\r')
-                else:
-                    pass
-                    #print('\x1b[2A',end='\r')
+            
+            print("receive message from address\033[1;32m %d node \033[0m"%((r_buff[0]<<8)+r_buff[1]),end='\r\n',flush = True)
+            print("message is "+str(r_buff[2:]),end='\r\n')
+            # print the rssi
+            if self.rssi:
+                self.get_channel_rssi()
+                #print('\x1b[3A',end='\r')
             else:
                 pass
-                print(r_buff)
-                print("%d"%((r_buff[0]<<8)+r_buff[1]))
+                #print('\x1b[2A',end='\r')
 
     def get_channel_rssi(self):
         GPIO.output(self.M1,GPIO.LOW)
         GPIO.output(self.M0,GPIO.LOW)
         time.sleep(0.1)
+        self.ser.flushInput()
         self.ser.write(bytes([0xC0,0xC1,0xC2,0xC3,0x00,0x02]))
         time.sleep(0.5)
         re_temp = bytes(5)
@@ -265,10 +263,13 @@ class sx126x:
             time.sleep(0.1)
             re_temp = self.ser.read(self.ser.inWaiting())
         if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
-            #print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
+            # print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
             print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
         else:
-            print("receive rssi value fail: ",re_temp)
+            # pass
+            print("receive rssi value fail")
+            # print("receive rssi value fail: ",re_temp)
     
     #def relay(self):
     #def wor(self):
+    #def remote_config(self):
