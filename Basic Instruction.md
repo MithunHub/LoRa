@@ -117,30 +117,30 @@ Then, clone the git to your preferred directory, e.g., ``mkdir ~\git-repo\`` and
 ```python
 git clone https://github.com/MithunHub/LoRa.git
 ```
-
-
 verbatim from here: [Link here](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)
-=======
 
 
-### How to use on Windows PC
-install python3 on pc
+## How to use on Windows PC
 
-open the cmd add python path to cmd,then install pyserial,see figure set_env.jpg
+### Step 1: Install Python3 and required packages
+install `python3` on pc
+
+Open the cmd add python path to cmd, then install `pyserial`, see figure set_env.jpg
+
 ```
 path=%path%;C:\Users\zhongshaohua\AppData\Local\Programs\Python\Python37
 path=%path%;C:\Users\zhongshaohua\AppData\Local\Programs\Python\Python37\Scripts
 pip3 install pyserial
 ```
+### Step 2: Obtain the address of LoRa HAT COMx and set it in the Python code
+open the device manager to check the LoRa HAT COMx number and change it on pc_node_main.py file,like that
 
-open the manager to check the LoRa HAT COMx number and change it on pc_node_main.py file,like that
-```
+```python
 node = sx126x(serial_num = "COM8",freq=868,addr=65535,power=22,rssi=True)
 ```
 
 run the code example
+```python
+python3 C:\Users\zhongshaohua\Desktop\pc_node_main.py
 ```
-python C:\Users\zhongshaohua\Desktop\pc_node_main.py
-```
->>>>>>> pr/1
 
