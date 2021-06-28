@@ -144,8 +144,8 @@ class sx126x:
             time.sleep(0.1)
             re_temp = self.ser.read(self.ser.inWaiting())
         if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
-            # print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
-            print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
+            print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
+            # print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
             print("",flush=True)
         else:
             # pass
@@ -153,6 +153,9 @@ class sx126x:
             # print("receive rssi value fail: ",re_temp)
 
         self.ser.flushInput()
+        
+    def free_serial(self):
+        self.ser.close()
     #def relay(self):
     #def wor(self):
     #def remote_config(self):
@@ -182,10 +185,8 @@ class sx126x:
 #
 #    RSSI (receive signal strength indicator) is {True or False}
 #        It will print the RSSI value when it receives each message
-#
-
 #node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=433,addr=30,power=22,rssi=False)
-node = sx126x(serial_num = "COM8",freq=868,addr=65535,power=22,rssi=True)
+node = sx126x(serial_num = "COM3",freq=433,addr=400,power=22,rssi=True)
 
 
 def send_deal():
@@ -214,4 +215,4 @@ try:
         node.receive()
         
 except:
-    pass
+    node.free_serial()
