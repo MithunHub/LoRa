@@ -162,3 +162,7 @@ conda config --set show_channel_urls yes
 [Tsinghua mirror for Anaconda](https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/)
 
 [CSDN link](https://blog.csdn.net/qq_37392932/article/details/81210470)
+
+```python
+conda install package_name
+```
