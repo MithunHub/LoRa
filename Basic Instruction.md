@@ -144,3 +144,6 @@ run the code example
 python3 C:\Users\zhongshaohua\Desktop\pc_node_main.py
 ```
 
+## Getting started with Pi Camera
+
+[Link here](https://projects.raspberrypi.org/en/projects/getting-started-with-picamera/)
