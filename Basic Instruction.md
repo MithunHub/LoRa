@@ -163,6 +163,7 @@ conda config --set show_channel_urls yes
 
 [CSDN link](https://blog.csdn.net/qq_37392932/article/details/81210470)
 
+How to install a package in anaconda
 ```python
 conda install package_name
 ```
