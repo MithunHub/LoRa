@@ -105,7 +105,7 @@ Back on your PI, double-click on the vnc server button in the upper right taskba
 
 verbatim from here: [Link here](https://www.raspberrypi.org/forums/viewtopic.php?t=214569)
 
-<<<<<<< HEAD
+
 ## Clone GitHub
 
 ```python
@@ -144,3 +144,26 @@ run the code example
 python3 C:\Users\zhongshaohua\Desktop\pc_node_main.py
 ```
 
+## Getting started with Pi Camera
+
+[Link here](https://projects.raspberrypi.org/en/projects/getting-started-with-picamera/)
+
+
+## Install and Update Anaconda in China
+
+Anaconda is a Python distribution that contains common packages for data science. It is derived from conda, a package and environment manager. 
+
+Simply put, just run these two commands separately in cmd.
+```python
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+```
+
+[Tsinghua mirror for Anaconda](https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/)
+
+[CSDN link](https://blog.csdn.net/qq_37392932/article/details/81210470)
+
+How to install a package in anaconda
+```python
+conda install package_name
+```
