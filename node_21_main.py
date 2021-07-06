@@ -84,6 +84,7 @@ def send_deal():
     node.addr_temp = node.addr
     node.set(node.freq,int(get_t[0]),node.power,node.rssi)
     node.send(get_t[1])
+    time.sleep(0.2)
     node.set(node.freq,node.addr_temp,node.power,node.rssi)
 
     print('\x1b[2A',end='\r')

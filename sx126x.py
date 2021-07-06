@@ -95,10 +95,15 @@ class sx126x:
         power_temp = self.power_cal(power)
         #if power_temp != None:
 
+        # there is some bug in get_channel_rssi() function with SX1268 HAT (SX1262 works well)
+        # ,so use other method to get rssi value ,that will output a rssi value following received 
+        # message when enable seventh bit with 06H register
         if rssi:
-            rssi_temp = 0x20
+            # if use get_channel_rssi() func it should uncomment next line and comment next next line
+            # rssi_temp = 0x20
+            rssi_temp = 0x80
         else:
-            rssi_temp = 0x00
+            rssi_temp = 0x00        
 
         l_crypt = crypt & 0xff
         h_crypt = crypt >> 8 & 0xff
@@ -107,9 +112,13 @@ class sx126x:
         self.cfg_reg[4] = low_addr
         self.cfg_reg[5] = net_id_temp
         self.cfg_reg[6] = self.SX126X_UART_BAUDRATE_9600 + air_speed_temp
-        self.cfg_reg[7] = buffer_size_temp + power_temp + rssi_temp
+        # if use get_channel_rssi() func it should uncomment next line and comment next next line
+        # self.cfg_reg[7] = buffer_size_temp + power_temp + rssi_temp
+        self.cfg_reg[7] = buffer_size_temp + power_temp
         self.cfg_reg[8] = freq_temp
-        self.cfg_reg[9] = 0x03
+        # if use get_channel_rssi() func it should uncomment next line and comment next next line
+        # self.cfg_reg[9] = 0x03
+        self.cfg_reg[9] = 0x03 + rssi_temp
         self.cfg_reg[10] = h_crypt
         self.cfg_reg[11] = l_crypt
         self.ser.flushInput()
@@ -137,15 +146,15 @@ class sx126x:
                     #print("parameters setting fail :",r_buff)
                 break
             else:
-                # print("setting fail,setting again")
+                print("setting fail,setting again")
                 self.ser.flushInput()
-                time.sleep(0.2)
-                # print('\x1b[1A',end='\r')
-                # if i == 1:
-                    # print("setting fail,Press Esc to Exit and run again")
-                    # time.sleep(2)
-                    # print('\x1b[1A',end='\r')
-                # pass
+                time.sleep(2)
+                print('\x1b[1A',end='\r')
+                if i == 1:
+                    print("setting fail,Press Esc to Exit and run again")
+                    time.sleep(2)
+                    print('\x1b[1A',end='\r')
+                pass
 
         GPIO.output(self.M0,GPIO.LOW)
         GPIO.output(self.M1,GPIO.LOW)
@@ -238,15 +247,21 @@ class sx126x:
 
     def receive(self):
         if self.ser.inWaiting() > 0:
-            time.sleep(0.2)
+            time.sleep(0.5)
             r_buff = self.ser.read(self.ser.inWaiting())
             
             print("receive message from address\033[1;32m %d node \033[0m"%((r_buff[0]<<8)+r_buff[1]),end='\r\n',flush = True)
-            print("message is "+str(r_buff[2:]),end='\r\n')
+            print("message is "+str(r_buff[2:-1]),end='\r\n')
+            
             # print the rssi
             if self.rssi:
-                self.get_channel_rssi()
-                #print('\x1b[3A',end='\r')
+                # there is some bug in get_channel_rssi() function with SX1268 HAT (SX1262 works well)
+                # ,so use other method to get rssi value ,that will output a rssi value following received 
+                # message when enable seventh bit with 06H register
+                # self.get_channel_rssi()
+                # print('\x1b[3A',end='\r')
+                print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
+                
             else:
                 pass
                 #print('\x1b[2A',end='\r')

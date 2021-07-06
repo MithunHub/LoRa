@@ -145,6 +145,10 @@ class sx126x:
             re_temp = self.ser.read(self.ser.inWaiting())
         if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
             print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
+<<<<<<< HEAD
+=======
+            # the packet rssi dont work now
+>>>>>>> pr/2
             # print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
             print("",flush=True)
         else:
@@ -153,7 +157,10 @@ class sx126x:
             # print("receive rssi value fail: ",re_temp)
 
         self.ser.flushInput()
+<<<<<<< HEAD
         
+=======
+>>>>>>> pr/2
     def free_serial(self):
         self.ser.close()
     #def relay(self):
@@ -185,8 +192,15 @@ class sx126x:
 #
 #    RSSI (receive signal strength indicator) is {True or False}
 #        It will print the RSSI value when it receives each message
+<<<<<<< HEAD
 #node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=433,addr=30,power=22,rssi=False)
 node = sx126x(serial_num = "COM3",freq=433,addr=400,power=22,rssi=True)
+=======
+#
+
+node = sx126x(serial_num = "COM8",freq=433,addr=100,power=22,rssi=True)
+# node = sx126x(serial_num = "COM8",freq=868,addr=65535,power=22,rssi=True)
+>>>>>>> pr/2
 
 
 def send_deal():
@@ -194,17 +208,7 @@ def send_deal():
     print("")
     print("input a string such as Hello World,it will send `Hello World` to all node address is from 0 to 65535",flush=True)
     print("please input and press Enter key:",end='',flush=True)
-
-    # while True:
-        # rec = sys.stdin.read(1)
-        # if rec != None:
-            # if rec == '\x0a': break
-            # get_rec += rec
-            # sys.stdout.write(rec)
-            # sys.stdout.flush()
-    
     lines=sys.stdin.readlines()
-    
     node.send(lines)
     
 try:
@@ -216,3 +220,7 @@ try:
         
 except:
     node.free_serial()
+<<<<<<< HEAD
+=======
+    pass
+>>>>>>> pr/2

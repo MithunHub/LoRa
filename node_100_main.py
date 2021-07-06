@@ -84,6 +84,7 @@ def send_deal():
     node.addr_temp = node.addr
     node.set(node.freq,int(get_t[0]),node.power,node.rssi)
     node.send(get_t[1])
+    time.sleep(0.2)
     node.set(node.freq,node.addr_temp,node.power,node.rssi)
 
     print('\x1b[2A',end='\r')
@@ -111,6 +112,7 @@ def send_cpu_continue(send_to_who,continue_or_not = True):
         node.set(node.freq,node.send_to,node.power,node.rssi)
         node.send("CPU Temperature:"+str(get_cpu_temp())+" C")
         node.set(node.freq,node.addr_temp,node.power,node.rssi)
+        timer_task.cancel()
         pass
     
 try:
@@ -120,8 +122,8 @@ try:
     print("Press \033[1;32ms\033[0m   to send cpu temperature every 10 seconds")
     
     # it will send every seconds(default is 10) seconds 
-    # send_to_who is the address of other node ( defult is 100)
-    send_to_who = 100
+    # send_to_who is the address of other node ( defult is 21)
+    send_to_who = 21 
     seconds = 10
     # timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
     
