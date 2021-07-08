@@ -284,7 +284,7 @@ class sx126x:
             re_temp = self.ser.read(self.ser.inWaiting())
         if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
             # print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
-            print("Last receive packet RSSI value: -{0}dBm".format(256-re_temp[3]))
+            print("Noise RSSI value: -{0}dBm".format(256-re_temp[3]))
         else:
             # pass
             print("Receive RSSI value failed!")
