@@ -8,10 +8,10 @@
 #    |============================================ |
 #    |   It does not suport LoRaWAN protocol !!!   |
 #    | ============================================|
-#   
+#
 #    This script is mainly for Raspberry Pi 3B+, 4B, and Zero series
 #    Since PC/Laptop does not have GPIO to control HAT, it should be configured by
-#    GUI and while setting the jumpers, 
+#    GUI and while setting the jumpers,
 #    Please refer to another script pc_main.py
 #
 
@@ -29,7 +29,7 @@ tty.setcbreak(sys.stdin.fileno())
 
 
 #
-#    Need to disable the serial login shell and have to enable serial interface 
+#    Need to disable the serial login shell and have to enable serial interface
 #    command `sudo raspi-config`
 #    More details: see https://github.com/MithunHub/LoRa/blob/main/Basic%20Instruction.md
 #
@@ -37,7 +37,7 @@ tty.setcbreak(sys.stdin.fileno())
 #
 
 
-#    The following is to obtain the temprature of the RPi CPU 
+#    The following is to obtain the temprature of the RPi CPU
 def get_cpu_temp():
     tempFile = open( "/sys/class/thermal/thermal_zone0/temp" )
     cpu_temp = tempFile.read()
@@ -50,9 +50,9 @@ def get_cpu_temp():
 #    Frequency is [850 to 930], or [410 to 493] MHz
 #
 #    address is 0 to 65535
-#        under the same frequence,if set 65535,the node can receive 
+#        under the same frequence,if set 65535,the node can receive
 #        messages from another node of address is 0 to 65534 and similarly,
-#        the address 0 to 65534 of node can receive messages while 
+#        the address 0 to 65534 of node can receive messages while
 #        the another note of address is 65535 sends.
 #        otherwise two node must be same the address and frequence
 #
@@ -80,7 +80,7 @@ def send_deal():
             sys.stdout.flush()
 
     get_t = get_rec.split(",")
-    
+
     node.addr_temp = node.addr
     node.set(node.freq,int(get_t[0]),node.power,node.rssi)
     node.send(get_t[1])
@@ -95,7 +95,7 @@ def send_deal():
 
 
 def send_cpu_continue(send_to_who,continue_or_not = True):
-    
+
     if continue_or_not:
         global timer_task
         global seconds
@@ -116,19 +116,20 @@ def send_cpu_continue(send_to_who,continue_or_not = True):
         node.set(node.freq,node.addr_temp,node.power,node.rssi)
         timer_task.cancel()
         pass
-    
+
 try:
     time.sleep(1)
     print("Press \033[1;32mEsc\033[0m to exit")
     print("Press \033[1;32mi\033[0m   to send")
     print("Press \033[1;32ms\033[0m   to send cpu temperature every 10 seconds")
-    
-    # it will send every seconds(default is 10) seconds 
-    # send_to_who is the address of other node ( defult is 100)
+
+    # send_to_who is the receiver's address (dafault is 21)
     send_to_who = 100
+
+    # sends data in every 10 seconds
     seconds = 10
     # timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
-    
+
     while True:
 
         if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
@@ -144,7 +145,7 @@ try:
                 print("Press \033[1;32mc\033[0m   to exit the send task")
                 timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
                 timer_task.start()
-                
+
                 while True:
                     if sys.stdin.read(1) == '\x63':
                         timer_task.cancel()
@@ -154,12 +155,12 @@ try:
                         break
 
             sys.stdout.flush()
-            
-            
+
+
         node.receive()
-        
+
         # timer,send messages automatically
-        
+
 except:
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
     # print('\x1b[2A',end='\r')
