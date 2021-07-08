@@ -117,12 +117,15 @@ class sx126x:
         self.cfg_reg[4] = low_addr
         self.cfg_reg[5] = net_id_temp
         self.cfg_reg[6] = self.SX126X_UART_BAUDRATE_9600 + air_speed_temp
-        # if use get_channel_rssi() func,  then uncomment next line and comment next to next line!
-        # self.cfg_reg[7] = buffer_size_temp + power_temp + rssi_temp
-        self.cfg_reg[7] = buffer_size_temp + power_temp
+        #
+        # it will enable to read noise rssi value when add 0x20 as follow
+        #
+        self.cfg_reg[7] = buffer_size_temp + power_temp + 0x20
         self.cfg_reg[8] = freq_temp
-        # if use get_channel_rssi() func,  then uncomment next line and comment next to next line!
-        # self.cfg_reg[9] = 0x03
+        #
+        # it will output a packet rssi value following received message
+        # when enable seventh bit with 06H register(rssi_temp = 0x80)
+        #
         self.cfg_reg[9] = 0x03 + rssi_temp
         self.cfg_reg[10] = h_crypt
         self.cfg_reg[11] = l_crypt
@@ -260,15 +263,9 @@ class sx126x:
 
             # print RSSI
             if self.rssi:
-                # At this moment there is a bug in get_channel_rssi() function with SX1268 HAT
-                # The get_channel_rssi() function works well in SX1262 HAT
-                # To solve the problem for SX1268, we use an alternative method to obtain RSSI value
-                # We enable the seventh bit of 06H register
-                # and obatin the RSSI value when the packet is received.
-
-                # self.get_channel_rssi()
                 # print('\x1b[3A',end='\r')
-                print("Packet RSSI value: -{0}dBm".format(256-r_buff[-1:][0]))
+                print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
+                self.get_channel_rssi()
 
             else:
                 pass
@@ -287,7 +284,7 @@ class sx126x:
             re_temp = self.ser.read(self.ser.inWaiting())
         if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
             # print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
-            print("Last receive packet RSSI value: -{0}dBm".format(256-re_temp[4]))
+            print("Last receive packet RSSI value: -{0}dBm".format(256-re_temp[3]))
         else:
             # pass
             print("Receive RSSI value failed!")
