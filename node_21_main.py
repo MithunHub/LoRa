@@ -103,6 +103,7 @@ def send_cpu_continue(send_to_who,continue_or_not = True):
         node.addr_temp = node.addr
         node.set(node.freq,node.send_to,node.power,node.rssi)
         node.send("CPU Temperature:"+str(get_cpu_temp())+" C")
+        time.sleep(0.2)
         node.set(node.freq,node.addr_temp,node.power,node.rssi)
         timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
         timer_task.start()
@@ -111,6 +112,7 @@ def send_cpu_continue(send_to_who,continue_or_not = True):
         node.addr_temp = node.addr
         node.set(node.freq,node.send_to,node.power,node.rssi)
         node.send("CPU Temperature:"+str(get_cpu_temp())+" C")
+        time.sleep(0.2)
         node.set(node.freq,node.addr_temp,node.power,node.rssi)
         timer_task.cancel()
         pass
