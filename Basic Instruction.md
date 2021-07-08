@@ -167,3 +167,6 @@ How to install a package in anaconda
 ```python
 conda install package_name
 ```
+
+## A good link to Print in Python
+[Link here](https://realpython.com/python-print/)
