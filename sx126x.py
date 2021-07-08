@@ -1,4 +1,4 @@
-# This file is used for LoRa and Raspberry pi4B/Pi Zero
+# This file is used for LoRa and Raspberry Pi4B/Pi Zero
 # This is the main class file that is often used for LoRa parameters settings
 
 import RPi.GPIO as GPIO
@@ -57,7 +57,7 @@ class sx126x:
         self.serial_n = serial_num
         self.power = power
         self.send_to = addr
-        
+
         # Initial the GPIO for M0 and M1 Pin
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
