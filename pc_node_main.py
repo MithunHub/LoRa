@@ -187,7 +187,7 @@ class sx126x:
 #        It will print the RSSI value when it receives each message
 #
 
-node = sx126x(serial_num = "COM8",freq=433,addr=100,power=22,rssi=True)
+node = sx126x(serial_num = "COM3",freq=433,addr=400,power=22,rssi=True)
 # node = sx126x(serial_num = "COM8",freq=868,addr=65535,power=22,rssi=True)
 
 
