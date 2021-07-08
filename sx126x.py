@@ -1,4 +1,4 @@
-# This file is used for LoRa and Raspberry pi4B related issues 
+# This file is used for LoRa and Raspberry pi4B related issues
 
 import RPi.GPIO as GPIO
 import serial
@@ -8,7 +8,7 @@ class sx126x:
 
     M0 = 22
     M1 = 27
-    # if the header is 0xC0, then the LoRa register settings dont lost when it poweroff, and 0xC2 will be lost. 
+    # if the header is 0xC0, then the LoRa register settings dont lost when it poweroff, and 0xC2 will be lost.
     # cfg_reg = [0xC0,0x00,0x09,0x00,0x00,0x00,0x62,0x00,0x17,0x00,0x00,0x00]
     cfg_reg = [0xC2,0x00,0x09,0x00,0x00,0x00,0x62,0x00,0x17,0x00,0x00,0x00]
     get_reg = bytes(12)
@@ -85,25 +85,25 @@ class sx126x:
             freq_temp = freq - 850
         elif freq >410:
             freq_temp = freq - 410
-        
+
         air_speed_temp = self.air_speed_cal(air_speed)
         # if air_speed_temp != None:
-        
+
         buffer_size_temp = self.buffer_size_cal(buffer_size)
         # if air_speed_temp != None:
-        
+
         power_temp = self.power_cal(power)
         #if power_temp != None:
 
         # there is some bug in get_channel_rssi() function with SX1268 HAT (SX1262 works well)
-        # ,so use other method to get rssi value ,that will output a rssi value following received 
+        # ,so use other method to get rssi value ,that will output a rssi value following received
         # message when enable seventh bit with 06H register
         if rssi:
             # if use get_channel_rssi() func it should uncomment next line and comment next next line
             # rssi_temp = 0x20
             rssi_temp = 0x80
         else:
-            rssi_temp = 0x00        
+            rssi_temp = 0x00
 
         l_crypt = crypt & 0xff
         h_crypt = crypt >> 8 & 0xff
@@ -135,7 +135,7 @@ class sx126x:
                     # print("parameters setting is :",end='')
                     # for i in self.cfg_reg:
                         # print(hex(i),end=' ')
-                        
+
                     # print('\r\n')
                     # print("parameters return is  :",end='')
                     # for i in r_buff:
@@ -148,7 +148,7 @@ class sx126x:
             else:
                 print("setting fail,setting again")
                 self.ser.flushInput()
-                time.sleep(2)
+                time.sleep(0.2)
                 print('\x1b[1A',end='\r')
                 if i == 1:
                     print("setting fail,Press Esc to Exit and run again")
@@ -194,20 +194,20 @@ class sx126x:
         # the pin M1 of lora HAT must be high when enter setting mode and get parameters
         GPIO.output(M1,GPIO.HIGH)
         time.sleep(0.1)
-        
+
         # send command to get setting parameters
         self.ser.write(bytes([0xC1,0x00,0x09]))
         if self.ser.inWaiting() > 0:
             time.sleep(0.1)
             self.get_reg = self.ser.read(self.ser.inWaiting())
-        
+
         # check the return characters from hat and print the setting parameters
         if self.get_reg[0] == 0xC1 and self.get_reg[2] == 0x09:
             fre_temp = self.get_reg[8]
             addr_temp = self.get_reg[3] + self.get_reg[4]
             air_speed_temp = self.get_reg[6] & 0x03
             power_temp = self.get_reg[7] & 0x03
-            
+
             air_speed_dic = {
                 0x00:"300bps",
                 0x01:"1200bps",
@@ -224,7 +224,7 @@ class sx126x:
                 0x02:"13dBm",
                 0x03:"10dBm"
             }
-            
+
             print("Frequence is {0}.125MHz.",fre_temp)
             print("Node address is {0}.",addr_temp)
             print("Air speed is "+ air_speed_dic(air_speed_temp))
@@ -235,7 +235,7 @@ class sx126x:
         GPIO.output(self.M1,GPIO.LOW)
         GPIO.output(self.M0,GPIO.LOW)
         time.sleep(0.1)
-        
+
         # add the node address ,and the node of address is 65535 can konw who send messages
         l_addr = self.addr_temp & 0xff
         h_addr = self.addr_temp >> 8 & 0xff
@@ -249,19 +249,19 @@ class sx126x:
         if self.ser.inWaiting() > 0:
             time.sleep(0.5)
             r_buff = self.ser.read(self.ser.inWaiting())
-            
+
             print("receive message from address\033[1;32m %d node \033[0m"%((r_buff[0]<<8)+r_buff[1]),end='\r\n',flush = True)
             print("message is "+str(r_buff[2:-1]),end='\r\n')
-            
+
             # print the rssi
             if self.rssi:
                 # there is some bug in get_channel_rssi() function with SX1268 HAT (SX1262 works well)
-                # ,so use other method to get rssi value ,that will output a rssi value following received 
+                # ,so use other method to get rssi value ,that will output a rssi value following received
                 # message when enable seventh bit with 06H register
                 # self.get_channel_rssi()
                 # print('\x1b[3A',end='\r')
                 print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
-                
+
             else:
                 pass
                 #print('\x1b[2A',end='\r')
@@ -284,7 +284,7 @@ class sx126x:
             # pass
             print("receive rssi value fail")
             # print("receive rssi value fail: ",re_temp)
-    
+
     #def relay(self):
     #def wor(self):
     #def remote_config(self):
