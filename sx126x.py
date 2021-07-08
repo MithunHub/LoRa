@@ -1,4 +1,5 @@
-# This file is used for LoRa and Raspberry pi4B related issues
+# This file is used for LoRa and Raspberry pi4B/Pi Zero
+# This is the main class file that is often used for LoRa parameters settings
 
 import RPi.GPIO as GPIO
 import serial
@@ -56,6 +57,7 @@ class sx126x:
         self.serial_n = serial_num
         self.power = power
         self.send_to = addr
+        
         # Initial the GPIO for M0 and M1 Pin
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
@@ -95,11 +97,14 @@ class sx126x:
         power_temp = self.power_cal(power)
         #if power_temp != None:
 
-        # there is some bug in get_channel_rssi() function with SX1268 HAT (SX1262 works well)
-        # ,so use other method to get rssi value ,that will output a rssi value following received
-        # message when enable seventh bit with 06H register
+        # At this moment there is a bug in get_channel_rssi() function with SX1268 HAT
+        # The get_channel_rssi() function works well in SX1262 HAT
+        # To solve the problem for SX1268, we use an alternative method to obtain RSSI value
+        # We enable the seventh bit of 06H register
+        # and obatin the RSSI value when the packet is received.
+
         if rssi:
-            # if use get_channel_rssi() func it should uncomment next line and comment next next line
+            # if use get_channel_rssi() func,  then uncomment next line and comment next to next line!
             # rssi_temp = 0x20
             rssi_temp = 0x80
         else:
@@ -112,11 +117,11 @@ class sx126x:
         self.cfg_reg[4] = low_addr
         self.cfg_reg[5] = net_id_temp
         self.cfg_reg[6] = self.SX126X_UART_BAUDRATE_9600 + air_speed_temp
-        # if use get_channel_rssi() func it should uncomment next line and comment next next line
+        # if use get_channel_rssi() func,  then uncomment next line and comment next to next line!
         # self.cfg_reg[7] = buffer_size_temp + power_temp + rssi_temp
         self.cfg_reg[7] = buffer_size_temp + power_temp
         self.cfg_reg[8] = freq_temp
-        # if use get_channel_rssi() func it should uncomment next line and comment next next line
+        # if use get_channel_rssi() func,  then uncomment next line and comment next to next line!
         # self.cfg_reg[9] = 0x03
         self.cfg_reg[9] = 0x03 + rssi_temp
         self.cfg_reg[10] = h_crypt
@@ -146,12 +151,12 @@ class sx126x:
                     #print("parameters setting fail :",r_buff)
                 break
             else:
-                print("setting fail,setting again")
+                print("setting has been failed, trying again!")
                 self.ser.flushInput()
                 time.sleep(0.2)
                 print('\x1b[1A',end='\r')
                 if i == 1:
-                    print("setting fail,Press Esc to Exit and run again")
+                    print("setting fail, press Esc to exit and run again")
                     time.sleep(2)
                     print('\x1b[1A',end='\r')
                 pass
@@ -201,7 +206,7 @@ class sx126x:
             time.sleep(0.1)
             self.get_reg = self.ser.read(self.ser.inWaiting())
 
-        # check the return characters from hat and print the setting parameters
+        # check the return characters from HAT and print the setting parameters
         if self.get_reg[0] == 0xC1 and self.get_reg[2] == 0x09:
             fre_temp = self.get_reg[8]
             addr_temp = self.get_reg[3] + self.get_reg[4]
@@ -236,7 +241,7 @@ class sx126x:
         GPIO.output(self.M0,GPIO.LOW)
         time.sleep(0.1)
 
-        # add the node address ,and the node of address is 65535 can konw who send messages
+        # add the node address ,and the node of address is 65535 can able to find who sends message
         l_addr = self.addr_temp & 0xff
         h_addr = self.addr_temp >> 8 & 0xff
 
@@ -253,14 +258,17 @@ class sx126x:
             print("receive message from address\033[1;32m %d node \033[0m"%((r_buff[0]<<8)+r_buff[1]),end='\r\n',flush = True)
             print("message is "+str(r_buff[2:-1]),end='\r\n')
 
-            # print the rssi
+            # print RSSI
             if self.rssi:
-                # there is some bug in get_channel_rssi() function with SX1268 HAT (SX1262 works well)
-                # ,so use other method to get rssi value ,that will output a rssi value following received
-                # message when enable seventh bit with 06H register
+                # At this moment there is a bug in get_channel_rssi() function with SX1268 HAT
+                # The get_channel_rssi() function works well in SX1262 HAT
+                # To solve the problem for SX1268, we use an alternative method to obtain RSSI value
+                # We enable the seventh bit of 06H register
+                # and obatin the RSSI value when the packet is received.
+
                 # self.get_channel_rssi()
                 # print('\x1b[3A',end='\r')
-                print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
+                print("Packet RSSI value: -{0}dBm".format(256-r_buff[-1:][0]))
 
             else:
                 pass
@@ -279,10 +287,10 @@ class sx126x:
             re_temp = self.ser.read(self.ser.inWaiting())
         if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
             # print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
-            print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
+            print("Last receive packet RSSI value: -{0}dBm".format(256-re_temp[4]))
         else:
             # pass
-            print("receive rssi value fail")
+            print("Receive RSSI value failed!")
             # print("receive rssi value fail: ",re_temp)
 
     #def relay(self):
