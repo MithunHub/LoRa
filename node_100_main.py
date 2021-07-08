@@ -2,18 +2,19 @@
 # -*- coding: UTF-8 -*-
 
 #
-#    this is an UART-LoRa device and thers is an firmware on Module
-#    users can transfer or receive the data directly by UART and dont
-#    need to set parameters like coderate,spread factor,etc.
+#    This code is for a UART-LoRa device and thers is an firmware on the module
+#    User can transmit and or receive the data directly by UART and we do not
+#    need to set the other parameters, such as like coderate and spreading factor.
+
 #    |============================================ |
-#    |   It does not suport LoRaWAN protocol !!!   |
+#    |         It does not suport LoRaWAN!!!       |
 #    | ============================================|
 #
 #    This script is mainly for Raspberry Pi 3B+, 4B, and Zero series
 #    Since PC/Laptop does not have GPIO to control HAT, it should be configured by
-#    GUI and while setting the jumpers,
-#    Please refer to another script pc_main.py
-#
+#    GUI and setting the jumpers
+#    Please refer to another script pc_main.py for PC/Laptop
+
 
 import sys
 import sx126x
@@ -29,13 +30,12 @@ old_settings = termios.tcgetattr(sys.stdin)
 tty.setcbreak(sys.stdin.fileno())
 
 
-#
+
 #    Need to disable the serial login shell and have to enable serial interface
 #    command `sudo raspi-config`
 #    More details: see https://github.com/MithunHub/LoRa/blob/main/Basic%20Instruction.md
 #
 #    When the LoRaHAT is attached to RPi, the M0 and M1 jumpers of HAT should be removed.
-#
 
 
 #    The following is to obtain the temprature of the RPi CPU
@@ -125,9 +125,10 @@ try:
     print("Press \033[1;32mi\033[0m   to send")
     print("Press \033[1;32ms\033[0m   to send cpu temperature every 10 seconds")
 
-    # it will send every seconds(default is 10) seconds
-    # send_to_who is the address of other node ( defult is 21)
+    # The address of receiver (we set the default as 21)
     send_to_who = 21
+
+    # The sends the data in 10 sec time interval (default value is 10)
     seconds = 10
     # timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
 
