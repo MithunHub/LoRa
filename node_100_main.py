@@ -2,18 +2,19 @@
 # -*- coding: UTF-8 -*-
 
 #
-#    this is an UART-LoRa device and thers is an firmware on Module
-#    users can transfer or receive the data directly by UART and dont
-#    need to set parameters like coderate,spread factor,etc.
+#    This code is for a UART-LoRa device and thers is an firmware on the module
+#    User can transmit and or receive the data directly by UART and we do not
+#    need to set the other parameters, such as like coderate and spreading factor.
+
 #    |============================================ |
-#    |   It does not suport LoRaWAN protocol !!!   |
+#    |         It does not suport LoRaWAN!!!       |
 #    | ============================================|
-#   
+#
 #    This script is mainly for Raspberry Pi 3B+, 4B, and Zero series
 #    Since PC/Laptop does not have GPIO to control HAT, it should be configured by
-#    GUI and while setting the jumpers, 
-#    Please refer to another script pc_main.py
-#
+#    GUI and setting the jumpers
+#    Please refer to another script pc_main.py for PC/Laptop
+
 
 import sys
 import sx126x
@@ -23,21 +24,21 @@ import select
 import termios
 import tty
 from threading import Timer
+import datetime
 
 old_settings = termios.tcgetattr(sys.stdin)
 tty.setcbreak(sys.stdin.fileno())
 
 
-#
-#    Need to disable the serial login shell and have to enable serial interface 
+
+#    Need to disable the serial login shell and have to enable serial interface
 #    command `sudo raspi-config`
 #    More details: see https://github.com/MithunHub/LoRa/blob/main/Basic%20Instruction.md
 #
 #    When the LoRaHAT is attached to RPi, the M0 and M1 jumpers of HAT should be removed.
-#
 
 
-#    The following is to obtain the temprature of the RPi CPU 
+#    The following is to obtain the temprature of the RPi CPU
 def get_cpu_temp():
     tempFile = open( "/sys/class/thermal/thermal_zone0/temp" )
     cpu_temp = tempFile.read()
@@ -50,9 +51,9 @@ def get_cpu_temp():
 #    Frequency is [850 to 930], or [410 to 493] MHz
 #
 #    address is 0 to 65535
-#        under the same frequence,if set 65535,the node can receive 
+#        under the same frequence,if set 65535,the node can receive
 #        messages from another node of address is 0 to 65534 and similarly,
-#        the address 0 to 65534 of node can receive messages while 
+#        the address 0 to 65534 of node can receive messages while
 #        the another note of address is 65535 sends.
 #        otherwise two node must be same the address and frequence
 #
@@ -80,7 +81,7 @@ def send_deal():
             sys.stdout.flush()
 
     get_t = get_rec.split(",")
-    
+
     node.addr_temp = node.addr
     node.set(node.freq,int(get_t[0]),node.power,node.rssi)
     node.send(get_t[1])
@@ -95,7 +96,7 @@ def send_deal():
 
 
 def send_cpu_continue(send_to_who,continue_or_not = True):
-    
+
     if continue_or_not:
         global timer_task
         global seconds
@@ -103,6 +104,8 @@ def send_cpu_continue(send_to_who,continue_or_not = True):
         node.addr_temp = node.addr
         node.set(node.freq,node.send_to,node.power,node.rssi)
         node.send("CPU Temperature:"+str(get_cpu_temp())+" C")
+        print("Sending message to node: ",send_to_who)
+        print(str(datetime.datetime.now()))
         time.sleep(0.2)
         node.set(node.freq,node.addr_temp,node.power,node.rssi)
         timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
@@ -116,19 +119,20 @@ def send_cpu_continue(send_to_who,continue_or_not = True):
         node.set(node.freq,node.addr_temp,node.power,node.rssi)
         timer_task.cancel()
         pass
-    
+
 try:
     time.sleep(1)
     print("Press \033[1;32mEsc\033[0m to exit")
     print("Press \033[1;32mi\033[0m   to send")
     print("Press \033[1;32ms\033[0m   to send cpu temperature every 10 seconds")
-    
-    # it will send every seconds(default is 10) seconds 
-    # send_to_who is the address of other node ( defult is 21)
-    send_to_who = 21 
+
+    # The address of receiver (we set the default as 21)
+    send_to_who = 21
+
+    # The sends the data in 10 sec time interval (default value is 10)
     seconds = 10
     # timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
-    
+
     while True:
 
         if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
@@ -144,7 +148,7 @@ try:
                 print("Press \033[1;32mc\033[0m   to exit the send task")
                 timer_task = Timer(seconds,send_cpu_continue,(send_to_who,))
                 timer_task.start()
-                
+
                 while True:
                     if sys.stdin.read(1) == '\x63':
                         timer_task.cancel()
@@ -154,12 +158,12 @@ try:
                         break
 
             sys.stdout.flush()
-            
-            
+
+
         node.receive()
-        
+
         # timer,send messages automatically
-        
+
 except:
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
     # print('\x1b[2A',end='\r')

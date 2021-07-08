@@ -7,7 +7,7 @@ Open the serial port of Raspberry Pi.
 ```python
 sudo raspi-config
 ```
-![WechatIMG3694|40%](https://user-images.githubusercontent.com/20032975/123502315-0ef39580-d67e-11eb-8a00-69b0da34b722.jpeg)
+![img](https://user-images.githubusercontent.com/20032975/123502315-0ef39580-d67e-11eb-8a00-69b0da34b722.jpeg)
 
 <img src="https://user-images.githubusercontent.com/20032975/123502317-187cfd80-d67e-11eb-9795-2602ecdf15db.jpeg" width="550">
 
@@ -106,24 +106,67 @@ Back on your PI, double-click on the vnc server button in the upper right taskba
 verbatim from here: [Link here](https://www.raspberrypi.org/forums/viewtopic.php?t=214569)
 
 
+## Clone GitHub
 
-### How to use on Windows PC
-install python3 on pc
+```python
+sudo apt-get update 
+sudo apt-get upgrade
+sudo apt-get install git
+```
+Then, clone the git to your preferred directory, e.g., ``mkdir ~\git-repo\`` and ``cd git-repo``
+```python
+git clone https://github.com/MithunHub/LoRa.git
+```
+verbatim from here: [Link here](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)
 
-open the cmd add python path to cmd,then install pyserial,see figure set_env.jpg
+
+## How to use on Windows PC
+
+### Step 1: Install Python3 and required packages
+install `python3` on pc
+
+Open the cmd add python path to cmd, then install `pyserial`, see figure set_env.jpg
+
 ```
 path=%path%;C:\Users\zhongshaohua\AppData\Local\Programs\Python\Python37
 path=%path%;C:\Users\zhongshaohua\AppData\Local\Programs\Python\Python37\Scripts
 pip3 install pyserial
 ```
+### Step 2: Obtain the address of LoRa HAT COMx and set it in the Python code
+open the device manager to check the LoRa HAT COMx number and change it on pc_node_main.py file,like that
 
-open the manager to check the LoRa HAT COMx number and change it on pc_node_main.py file,like that
-```
+```python
 node = sx126x(serial_num = "COM8",freq=868,addr=65535,power=22,rssi=True)
 ```
 
 run the code example
-```
-python C:\Users\zhongshaohua\Desktop\pc_node_main.py
+```python
+python3 C:\Users\zhongshaohua\Desktop\pc_node_main.py
 ```
 
+## Getting started with Pi Camera
+
+[Link here](https://projects.raspberrypi.org/en/projects/getting-started-with-picamera/)
+
+
+## Install and Update Anaconda in China
+
+Anaconda is a Python distribution that contains common packages for data science. It is derived from conda, a package and environment manager. 
+
+Simply put, just run these two commands separately in cmd.
+```python
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+```
+
+[Tsinghua mirror for Anaconda](https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/)
+
+[CSDN link](https://blog.csdn.net/qq_37392932/article/details/81210470)
+
+How to install a package in anaconda
+```python
+conda install package_name
+```
+
+## A good link to Print in Python
+[Link here](https://realpython.com/python-print/)
