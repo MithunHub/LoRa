@@ -126,7 +126,7 @@ class sx126x:
             self.ser.flushInput()
 
             print("receive message from address %d node "%((r_buff[0]<<8)+r_buff[1]))
-            print("message is "+str(r_buff[2:]))
+            print("message is "+str(r_buff[2:-1]))
             # print the rssi
             if self.rssi:
                 self.get_channel_rssi()                
@@ -146,7 +146,7 @@ class sx126x:
         if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
             print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
             # the packet rssi dont work now
-            # print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
+            print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
             print("",flush=True)
         else:
             # pass
@@ -187,7 +187,7 @@ class sx126x:
 #        It will print the RSSI value when it receives each message
 #
 
-node = sx126x(serial_num = "COM3",freq=433,addr=400,power=22,rssi=True)
+node = sx126x(serial_num = "COM3",freq=433,addr=21,power=22,rssi=True)
 # node = sx126x(serial_num = "COM8",freq=868,addr=65535,power=22,rssi=True)
 
 
