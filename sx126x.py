@@ -4,6 +4,7 @@
 import RPi.GPIO as GPIO
 import serial
 import time
+import datetime
 
 class sx126x:
 
@@ -265,7 +266,15 @@ class sx126x:
             if self.rssi:
                 # print('\x1b[3A',end='\r')
                 print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
+                # f=open("g.txt","a")
                 self.get_channel_rssi()
+                e = datetime.datetime.now()
+                f=open("g.txt","a")
+                f.write("Packet RSSI: -{0}dBm".format(256-r_buff[-1:][0]))
+                #f.write("a")
+                # print ("Current date and time = %s" % e)
+                f.write(" Current date and time = %s\n" % e)
+                f.close()
 
             else:
                 pass
@@ -284,7 +293,10 @@ class sx126x:
             re_temp = self.ser.read(self.ser.inWaiting())
         if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
             # print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
+            f=open("g.txt","a")
             print("Noise RSSI value: -{0}dBm".format(256-re_temp[3]))
+            f.write("Noise RSSI: -{0}dBm ".format(256-re_temp[3]))
+            f.close()
         else:
             # pass
             print("Receive RSSI value failed!")
