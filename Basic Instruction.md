@@ -132,8 +132,14 @@ path=%path%;C:\Users\zhongshaohua\AppData\Local\Programs\Python\Python37
 path=%path%;C:\Users\zhongshaohua\AppData\Local\Programs\Python\Python37\Scripts
 pip3 install pyserial
 ```
-### Step 2: Obtain the address of LoRa HAT COMx and set it in the Python code
-open the device manager to check the LoRa HAT COMx number and change it on pc_node_main.py file,like that
+
+another alternative way, if you are using `Anaconda + Spyder`, then `conda install -c anaconda pyserial`
+
+### Step 2: Update the COM port driver 
+
+
+### Step 3: Obtain the address of LoRa HAT COMx and set it in the Python code
+open the device manager to check the LoRa HAT COMx number and change it on pc_node_main.py file, like that
 
 ```python
 node = sx126x(serial_num = "COM8",freq=868,addr=65535,power=22,rssi=True)
