@@ -137,10 +137,11 @@ another alternative way, if you are using `Anaconda + Spyder`, then `conda insta
 
 ### Step 2: Update the COM port driver 
 
-[Link ]()
+Open Device manager in Windows PC, then go the Port, and update the driver [CP210x_USB_TO_UART Driver update](https://github.com/MithunHub/LoRa/files/6834424/CP210x_USB_TO_UART.zip)
+
 
 ### Step 3: Obtain the address of LoRa HAT COMx and set it in the Python code
-open the device manager to check the LoRa HAT COMx number and change it on pc_node_main.py file, like that
+Open Device manager to check the LoRa HAT COMx number and change it on pc_main.py file, for example
 
 ```python
 node = sx126x(serial_num = "COM8",freq=433,addr=100,power=22,rssi=True)
