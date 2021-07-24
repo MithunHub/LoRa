@@ -66,47 +66,7 @@ sudo apt-get install python-serial
 ```
 
 
-## Install RealVNC server and viewer
-It would be good to install RealVNC server
-
-[Link here](https://www.raspberrypi.org/forums/viewtopic.php?t=214569)
-
-```python
-sudo apt-get install RealVNC-vnc-server
-```
-or 
-
-```python
-sudo apt-get install realvnc-vnc-server
-```
-
-```python
-sudo apt-get install realvnc-vnc-viewer
-sudo apt-get update
-```
-
-now to configure the settings in the terminal type the following.
-
-```python
-sudo raspi-config
-```
-
-Now go to - interfacing and scroll down to VNC click enter and click Enable.
-
-Now to make sure everything is set in place and ready to rock and roll: complete the following in terminal
-
-```python
-sudo apt-get update
-sudo apt-get upgrade
-sudo reboot
-```
-Now your Pi is ready to use Real VNC. download RealVNC on your windows machine and launch it.
-Back on your PI, double-click on the vnc server button in the upper right taskbar. copy IP under connectivity and paste that into your windows machine.
-
-verbatim from here: [Link here](https://www.raspberrypi.org/forums/viewtopic.php?t=214569)
-
-
-## Clone GitHub
+### Step 3: Clone GitHub
 
 ```python
 sudo apt-get update 
@@ -151,6 +111,48 @@ run the code example
 ```python
 python3 C:\Users\zhongshaohua\Desktop\pc_node_main.py
 ```
+
+# Important Additional Resources 
+
+## Install RealVNC server and viewer
+It would be good to install RealVNC server
+
+[Link here](https://www.raspberrypi.org/forums/viewtopic.php?t=214569)
+
+```python
+sudo apt-get install RealVNC-vnc-server
+```
+or 
+
+```python
+sudo apt-get install realvnc-vnc-server
+```
+
+```python
+sudo apt-get install realvnc-vnc-viewer
+sudo apt-get update
+```
+
+now to configure the settings in the terminal type the following.
+
+```python
+sudo raspi-config
+```
+
+Now go to - interfacing and scroll down to VNC click enter and click Enable.
+
+Now to make sure everything is set in place and ready to rock and roll: complete the following in terminal
+
+```python
+sudo apt-get update
+sudo apt-get upgrade
+sudo reboot
+```
+Now your Pi is ready to use Real VNC. download RealVNC on your windows machine and launch it.
+Back on your PI, double-click on the vnc server button in the upper right taskbar. copy IP under connectivity and paste that into your windows machine.
+
+verbatim from here: [Link here](https://www.raspberrypi.org/forums/viewtopic.php?t=214569)
+
 
 ## Getting started with Pi Camera
 
