@@ -93,7 +93,8 @@ path=%path%;C:\Users\zhongshaohua\AppData\Local\Programs\Python\Python37\Scripts
 pip3 install pyserial
 ```
 
-another alternative way, if you are using `Anaconda + Spyder`, then `conda install -c anaconda pyserial`
+#### Alternative way, easiest!😊
+if you are using `Anaconda + Spyder`, then `conda install -c anaconda pyserial`
 
 ### Step 2: Update the COM port driver 
 
