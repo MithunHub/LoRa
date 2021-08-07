@@ -145,11 +145,11 @@ class sx126x:
                 # print("return value: -{0}dBm".format(256-r))
                 # print("return value: -{0}dBm".format(256-r1))
 
-                da = pd.read_csv('save_data_01.csv')
+                data_holder = pd.read_csv('save_data_01.csv')
                 day = strftime("%d %m %Y at %I:%M:%S%p")
                 new_data = pd.Series([str(day),str((r_buff[0]<<8)+r_buff[1]), str(-(256-r)),str(-(256-r1))], index= ['Time Rx','Node','Noise RSSI','Channel RSSI'])
-                da = da.append(new_data,ignore_index=True)
-                da.to_csv('save_data_01.csv',index=False) 
+                data_holder = data_holder.append(new_data,ignore_index=True)
+                data_holder.to_csv('save_data_01.csv',index=False) 
 
             else:
                 pass
