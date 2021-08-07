@@ -1,6 +1,6 @@
 # Notes
 
-- This code is to send a LoRa message from Raspberry Pi (run `rasp_pi.py`) to PC (run `pc.pi`). 
+- This code is to send a LoRa message from Raspberry Pi (run `rasp_pi.py`) to PC (run `pc_main.py`). 
 - The data is saved in _save_data_01.csv_ file, the data will be automatically appended. 
 
 
