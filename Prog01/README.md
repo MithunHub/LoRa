@@ -8,7 +8,7 @@ The following library would be useful
 - [pandas](https://pandas.pydata.org/pandas-docs/stable/index.html) for data handling and 
 - [RaspberryPi Date and Time basic introduction](https://projects.raspberrypi.org/en/projects/generic-python-strftime)
 
-The program is very simple to use. The only difference I made from the base program is that
+The program is very simple to use. The only difference that I made from the base program is
 - `def get_channel_rssi(self):` will return channel RSSI and noise RSSI register value
 - using pandas, the data will be appended using 
 ```python
