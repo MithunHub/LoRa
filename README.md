@@ -4,7 +4,7 @@ We aim to develop a peer-to-peer network, where one and multiple Raspberry Pis a
 ### File name and their meaning
 - `pc_main.py`  This file is for PC, the default LoRa node's address is 100. We can test the LoRa's parameter settings by the RF module (see the basic instruction page). 
 - `Rpi_main.py` This is for Raspberry pi, the default address of LoRa module is 21. Note that if we use multiple Pis, we need to set the node's address in this source code. 
-- `BigData.py` We use is script to transfer a large file, the LoRa module's default address is 21. 
+- `BigData.py` We use this script to transfer a large file, the LoRa module's default address is 21. 
 
 
 ### LoRa manufacturer
